@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: automagic-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: automagic-db
+  template:
+    metadata:
+      labels:
+        app: automagic-db
+    spec:
+      containers:
+        - name: automagic-db
+          image: mabdelgawad94/automagic_developer:db-latest
+          envFrom:
+            - secretRef:
+                name: env-secret
+          env:
+            - name: POSTGRES_DB
+              value: automagic-db
+            - name: POSTGRES_USER
+              value: dbuser
+            - name: POSTGRES_PASSWORD
+              value: B6vXq5Wm8*0k
+            - name: PGDATA
+              value: /var/lib/postgresql/data/
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: automagic-db-data-volume
+              mountPath: "/var/lib/postgresql/data/"
+      imagePullSecrets:
+        - name: dockerhub-secret
+      volumes:
+        - name: automagic-db-data-volume
+          persistentVolumeClaim:
+            claimName: automagic-db-data-pvc

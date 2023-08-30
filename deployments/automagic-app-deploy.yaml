@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: automagic-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: automagic-app
+  template:
+    metadata:
+      labels:
+        app: automagic-app
+    spec:
+      containers:
+        - name: automagic-app
+          image: mabdelgawad94/automagic_developer:app-latest
+          envFrom:
+            - secretRef:
+                name: env-secret
+          env:
+            - name: GOOGLE_SA
+              valueFrom:
+                secretKeyRef:
+                  name: google-secret
+                  key: GOOGLE_SA
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: automagic-static-volume
+              mountPath: "/website/static/"
+            - name: automagic-media-volume
+              mountPath: "/website/media/"
+      imagePullSecrets:
+        - name: dockerhub-secret
+      volumes:
+        - name: automagic-static-volume
+          persistentVolumeClaim:
+            claimName: automagic-static-pvc
+        - name: automagic-media-volume
+          persistentVolumeClaim:
+            claimName: automagic-media-pvc

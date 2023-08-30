@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: automagic-db
+  labels:
+    name: automagic-db
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 5432  # Port on the Service
+      targetPort: 5432  # Port on the Pods
+  selector:
+    app: automagic-db

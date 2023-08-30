@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-monitor-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-monitor
+  template:
+    metadata:
+      labels:
+        app: server-monitor
+    spec:
+      containers:
+        - name: system-monitor
+          image: mabdelgawad94/automagic_developer:server-monitor-latest
+          envFrom:
+            - secretRef:
+                name: env-secret
+      imagePullSecrets:
+        - name: dockerhub-secret
