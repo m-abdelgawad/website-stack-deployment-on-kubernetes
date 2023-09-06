@@ -17,6 +17,6 @@ spec:
           image: mabdelgawad94/automagic_developer:server-monitor-latest
           envFrom:
             - secretRef:
-                name: env-secret
+                name: automagic-secrets
       imagePullSecrets:
         - name: dockerhub-secret

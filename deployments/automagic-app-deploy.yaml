@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: automagic-app-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: automagic-app
@@ -17,12 +17,12 @@ spec:
           image: mabdelgawad94/automagic_developer:app-latest
           envFrom:
             - secretRef:
-                name: env-secret
+                name: automagic-secrets
           env:
             - name: GOOGLE_SA
               valueFrom:
                 secretKeyRef:
-                  name: google-secret
+                  name: google-analytics-secrets
                   key: GOOGLE_SA
           ports:
             - containerPort: 8000
